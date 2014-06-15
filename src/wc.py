@@ -15,7 +15,7 @@ DEBUG = 0
 TEST = 0
 
 def wc(path, lines=True, words=True, chars=True, bytes1=True):
-    '''Prints the last lines of a file'''
+    '''Prints the line, word, char, and byte counts of a file'''
     with open(path,'rb') as f_in:
         line_count = 0
         word_count = 0
@@ -43,7 +43,7 @@ def wc(path, lines=True, words=True, chars=True, bytes1=True):
         counts.append(str(byte1_count))
     
     max_len = max([len(cnt) for cnt in counts])
-    print ' '.join([cnt.rjust(max_len) for cnt in counts]), path       
+    print ' '.join([cnt.rjust(max_len) for cnt in counts]), path    
     
             
 def main():
