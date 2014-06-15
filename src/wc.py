@@ -31,7 +31,7 @@ def wc(path, lines=True, words=True, chars=True, bytes1=True):
                 char_count += len(line)
             if bytes1:
                 byte1_count += len(line)
-            
+    
     counts = []
     if lines:
         counts.append(str(line_count))
@@ -41,6 +41,7 @@ def wc(path, lines=True, words=True, chars=True, bytes1=True):
         counts.append(str(char_count))
     if bytes1:
         counts.append(str(byte1_count))
+    
     max_len = max([len(cnt) for cnt in counts])
     print ' '.join([cnt.rjust(max_len) for cnt in counts]), path       
     
@@ -68,10 +69,8 @@ def main():
     
     if not any([lines, words, chars, bytes1]):
         lines, words, chars = True, True, True
-         
-    #print lines, words, chars, bytes1
     
-    wc(file1, lines, words, chars, bytes1) 
+    wc(file1, lines, words, chars, bytes1)
     
 if __name__ == '__main__':
     if DEBUG:

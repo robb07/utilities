@@ -8,23 +8,20 @@ Created on Jun 15, 2014
 '''
 
 import sys
+from itertools import islice
 
 from argparse import ArgumentParser
 
 DEBUG = 0
-TEST = 0
+TEST = 1
 
 def tail(path, N=10):
     '''Prints the last lines of a file'''
-    with open(path,'rb') as f_in:
-        length = 0
-        for line in f_in:
-            length += 1
+    length = sum(1 for line in open(path,'rb'))
             
     with open(path, 'rb') as f_in:
-        for i, line in enumerate(f_in):
-            if length - i <= N:
-                print line.strip() 
+        for line in islice(f_in, length-N, length):
+            print line.strip() 
             
 def main():
     ''' Process command line options '''

@@ -8,26 +8,18 @@ Created on Jun 15, 2014
 '''
 
 import sys
+from itertools import islice
 
 from argparse import ArgumentParser
 
 DEBUG = 0
-TEST = 1
+TEST = 0
 
 def head(path, N=10):
     '''Prints the first lines of a file'''
     with open(path,'rb') as f_in:
-#         for line in f_in:
-#             print N, line.strip()
-#             N -= 1
-#             if N == 0:
-#                 break
-        #[print( line.strip()) for i, line in enumerate(f_in) if i<N]
-        #lines = [line.strip() for i, line in enumerate(f_in) if i<N]
-        lines = [line.strip() for _, line in zip(range(N),f_in)]
-        for line in lines:
-            print line
-        
+        for line in islice(f_in, N):
+            print line.strip()
             
 def main():
     ''' Process command line options '''
