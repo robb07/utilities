@@ -8,3 +8,4 @@ Utilities List
 ==============
 
 1. csv\_tab\_converter -- Converts delimited files to other delimited types
+2. du -- Calculates disk utilization of a file, directory (recursive), or list of files and directories
