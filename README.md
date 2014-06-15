@@ -7,5 +7,5 @@ I created this repository for storing the utilities I'm making as part of my 30 
 Utilities List
 ==============
 
-1. csv\_tab\_converter -- Converts delimited files to other delimited types
+1. delimiter\_converter -- Converts file from one delimiter to another
 2. du -- Calculates disk utilization of a file, directory (recursive), or list of files and directories

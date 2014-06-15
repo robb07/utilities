@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 '''
 
-csv_tab_converter -- Converts tab delimited and csv delimited back and forth.
-
+delimiter_converter -- Converts file from one delimiter to another
 Created on Jun 10, 2014
 
 @author: Robb
@@ -50,7 +49,7 @@ def main():
     ''' Command line options '''
     
     # Setup argument parser
-    parser = ArgumentParser(description='Converts a file delimited by one character to a file delimited by another')
+    parser = ArgumentParser(description='Converts a file from one delimiter character to another')
     parser.add_argument("-i", "--in_delim", help="The input delimiter, default is \\t", default='\t')
     parser.add_argument("-o", "--out_delim", help="The output delimiter, default is \\t", default='\t')
     parser.add_argument("-n", help="The number of lines to output", type=int)
