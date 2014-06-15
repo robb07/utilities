@@ -53,11 +53,11 @@ def du(path, depth=0, max_depth=None, print_files=False, units=None):
     if os.path.isdir(path):
         size = sum([du(os.path.join(path,p), depth+1, max_depth, print_files, units) for p in os.listdir(path)])
         if max_depth is None or depth <= max_depth:
-            print disp_units(size, units), '\t', path
+            print disp_units(size, units).rjust(8), '\t', path
     else:
         size = os.path.getsize(path)
         if print_files and (max_depth is None or depth <= max_depth):
-            print disp_units(size, units), '\t', path
+            print disp_units(size, units).rjust(8), '\t', path
         
     return size
 

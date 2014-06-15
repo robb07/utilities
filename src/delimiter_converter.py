@@ -53,8 +53,8 @@ def main():
     parser.add_argument("-i", "--in_delim", help="The input delimiter, default is \\t", default='\t')
     parser.add_argument("-o", "--out_delim", help="The output delimiter, default is \\t", default='\t')
     parser.add_argument("-n", help="The number of lines to output", type=int)
-    parser.add_argument("file_in", help="The file to convert")
-    parser.add_argument("file_out", help="The converted file")
+    parser.add_argument("file_in", help="The file to convert")#,nargs='?')
+    parser.add_argument("file_out", help="The converted file")#,nargs='?')
      
     # Process arguments
     args = parser.parse_args()
@@ -93,6 +93,8 @@ if __name__ == '__main__':
         sys.argv.append('-o:')
         sys.argv.append('../resources/sample_tab_data.txt')
         sys.argv.append('../resources/sample_tab_data_out_colon2.txt')
+    elif TEST == 4:
+        sys.argv.append('-i,')
     
     
     sys.exit(main())
