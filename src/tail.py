@@ -13,7 +13,7 @@ from itertools import islice
 from argparse import ArgumentParser
 
 DEBUG = 0
-TEST = 1
+TEST = 0
 
 def tail(path, N=10):
     '''Prints the last lines of a file'''
