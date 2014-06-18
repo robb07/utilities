@@ -17,9 +17,9 @@ TEST = 0
 
 def head(path, N=10):
     '''Prints the first lines of a file'''
-    with open(path,'rb') as f_in:
-        for line in islice(f_in, N):
-            print line.strip()
+    with open(path,'r') as f_in:
+        sys.stdout.writelines(islice(f_in, N))
+        
             
 def main():
     ''' Process command line options '''

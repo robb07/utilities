@@ -13,15 +13,14 @@ from itertools import islice
 from argparse import ArgumentParser
 
 DEBUG = 0
-TEST = 0
+TEST = 1
 
 def tail(path, N=10):
     '''Prints the last lines of a file'''
-    length = sum(1 for line in open(path,'rb'))
+    length = sum(1 for _ in open(path,'rb'))
             
     with open(path, 'rb') as f_in:
-        for line in islice(f_in, length-N, length):
-            print line.strip() 
+        sys.stdout.writelines(islice(f_in, length-N, length))
             
 def main():
     ''' Process command line options '''
