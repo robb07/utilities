@@ -12,3 +12,4 @@ Utilities List
 3. head -- Print the first lines of a file
 4. tail -- Print the last lines of a file
 5. wc -- Count the lines, words, charactters, or bytes of a file
+6. nl -- Number the lines of a file
