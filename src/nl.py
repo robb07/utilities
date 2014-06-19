@@ -12,7 +12,7 @@ import sys
 from argparse import ArgumentParser
 
 DEBUG = 0
-TEST = 1
+TEST = 0
 
 def nl(path):
     '''Numbers the lines in the file'''
