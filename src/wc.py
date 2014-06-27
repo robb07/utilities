@@ -8,31 +8,28 @@ Created on Jun 15, 2014
 '''
 
 import sys
-
-from argparse import ArgumentParser
+import argparse
 
 DEBUG = 0
 TEST = 0
 
     
-def wc(path, lines=True, words=True, chars=True, bytes1=True):
+def wc(file_in, lines=True, words=True, chars=True, bytes1=True):
     '''Prints the line, word, char, and byte counts of a file'''
-    with open(path,'r') as f_in:
-        line_count = 0
-        word_count = 0
-        char_count = 0
-        byte1_count = 0
-         
-         
-        for line in f_in:
-            if lines:
-                line_count += 1
-            if words:
-                word_count += len(line.split())
-            if chars:
-                char_count += len(line)
-            if bytes1:
-                byte1_count += len(line)
+    line_count = 0
+    word_count = 0
+    char_count = 0
+    byte1_count = 0
+    
+    for line in file_in:
+        if lines:
+            line_count += 1
+        if words:
+            word_count += len(line.split())
+        if chars:
+            char_count += len(line)
+        if bytes1:
+            byte1_count += len(line)
 
     counts = []
     if lines:
@@ -45,14 +42,20 @@ def wc(path, lines=True, words=True, chars=True, bytes1=True):
         counts.append(str(byte1_count))
     
     max_len = max([len(cnt) for cnt in counts])
-    print ' '.join([cnt.rjust(max_len) for cnt in counts]), path    
+    
+    output = ' '.join([cnt.rjust(max_len) for cnt in counts])
+    path = file_in.name 
+    if path != '<stdin>':
+        output += '\t' + path 
+    
+    sys.stdout.writelines(output + '\n')  
                
 def main():
     ''' Process command line options '''
     
     # Setup argument parser
-    parser = ArgumentParser(description='Counts the lines in the file')
-    parser.add_argument('FILE',help='The file to count from')
+    parser = argparse.ArgumentParser(description='Counts the lines in the file')
+    parser.add_argument('FILE', nargs='?', help='The file to count from', type=argparse.FileType('r'), default=sys.stdin)
     parser.add_argument('-b','--bytes',help='Count the bytes',action='store_true')
     parser.add_argument('-c','--chars',help='Count the chars',action='store_true')
     parser.add_argument('-l','--lines',help='Count the new lines',action='store_true')
@@ -62,7 +65,7 @@ def main():
     args = parser.parse_args()
     
     # Unpack the arguments
-    file1 = args.FILE
+    file_in = args.FILE
     lines = args.lines
     words = args.words
     chars = args.chars
@@ -71,8 +74,9 @@ def main():
     if not any([lines, words, chars, bytes1]):
         lines, words, chars = True, True, True
     
-    wc(file1, lines, words, chars, bytes1)
-        
+    wc(file_in, lines, words, chars, bytes1)
+    
+    file_in.close()
     
 if __name__ == '__main__':
     if DEBUG:

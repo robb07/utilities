@@ -11,35 +11,35 @@ import sys
 import re
 from itertools import islice
 
-from argparse import ArgumentParser
+import argparse
+#from argparse import ArgumentParser
 
 DEBUG = 0
 TEST = 0
 
-def grep(path, pattern, regular_expression=False, max_num=None, ignore_case=False, invert_match=False):
+def grep(file_in, pattern, regular_expression=False, max_num=None, ignore_case=False, invert_match=False):
     '''Prints the lines of a file that match the pattern'''
     flags = 0
     if ignore_case:
         flags |= re.IGNORECASE
     
-    with open(path,'r') as f_in:
-        if regular_expression:
-            lines_and_matches = ((line, re.search(pattern, line, flags=flags) is not None) for line in f_in)
+    if not invert_match:
+        match_filter = lambda x: x
+    else:
+        match_filter = lambda x: not x
+        
+    if regular_expression:
+        lines = (line for line in file_in if match_filter(re.search(pattern, line, flags=flags) is not None))
+    else:
+        if not ignore_case:
+            lines = (line for line in file_in if match_filter(line.find(pattern)!=-1))
         else:
-            if not ignore_case:
-                lines_and_matches = ((line, line.find(pattern)!=-1) for line in f_in)
-            else:
-                lines_and_matches = ((line, line.lower().find(pattern.lower())!=-1) for line in f_in)
-            
-        if not invert_match:
-            lines = (line for line, matched in lines_and_matches if matched)
-        else:
-            lines = (line for line, matched in lines_and_matches if not matched)
-            
-        if max_num is not None:
-            lines = islice(lines, max_num)
-            
-        sys.stdout.writelines(lines)
+            lines = (line for line in file_in if match_filter(line.lower().find(pattern.lower())!=-1))
+    
+    if max_num is not None:
+        lines = islice(lines, max_num)
+        
+    sys.stdout.writelines(lines)
         
         
             
@@ -47,9 +47,9 @@ def main():
     ''' Process command line options '''
     
     # Setup argument parser
-    parser = ArgumentParser(description='Prints the lines of a file that match the pattern')
+    parser = argparse.ArgumentParser(description='Prints the lines of a file that match the pattern')
     parser.add_argument('PATTERN', help='The pattern to match')
-    parser.add_argument('FILE', help='The file to print lines from')
+    parser.add_argument('FILE', nargs='?', help='The file to match lines from', type=argparse.FileType('r'), default=sys.stdin)
     parser.add_argument('-P','--python-regexp', help='PATTERN is a python regular expression', action='store_true')
     parser.add_argument('-m','--max-num', help='Stop after MAX_NUM matches',type=int)
     parser.add_argument('-i','--ignore-case', help='ignore-case distinctions', action='store_true')
@@ -60,13 +60,14 @@ def main():
     
     # Unpack the arguments
     pattern = args.PATTERN
-    path = args.FILE
+    file_in = args.FILE
     regexp = args.python_regexp
     max_num = args.max_num
     ignore_case = args.ignore_case
     invert_match = args.invert_match
-        
-    grep(path, pattern, regexp, max_num, ignore_case, invert_match) 
+    
+    grep(file_in, pattern, regexp, max_num, ignore_case, invert_match)
+    file_in.close() 
     
 if __name__ == '__main__':
     if DEBUG:
