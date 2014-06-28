@@ -14,3 +14,4 @@ Utilities List
 5. wc -- Count the lines, words, charactters, or bytes of a file
 6. nl -- Number the lines of a file
 7. grep -- Print the lines that match the pattern
+8. cat -- Outputs the files or standard input to standard output
