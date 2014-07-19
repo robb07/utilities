@@ -13,9 +13,13 @@ import argparse
 DEBUG = 0
 TEST = 0
 
+def wc_file_name(file_name, lines=True, words=True, chars=True, bytes1=True):
+    '''Counts the lines, words, chars, and bytes of a file'''
+    with open(file_name,'r') as f_in:
+        return wc_file_in(f_in,lines,words,chars,bytes1)
     
-def wc(file_in, lines=True, words=True, chars=True, bytes1=True):
-    '''Prints the line, word, char, and byte counts of a file'''
+def wc_file_in(file_in, lines=True, words=True, chars=True, bytes1=True):
+    '''Counts the lines, words, chars, and bytes of an opened file'''
     line_count = 0
     word_count = 0
     char_count = 0
@@ -48,7 +52,18 @@ def wc(file_in, lines=True, words=True, chars=True, bytes1=True):
     if path != '<stdin>':
         output += '\t' + path 
     
-    sys.stdout.writelines(output + '\n')  
+    return output  
+    
+def wc(file1, lines=True, words=True, chars=True, bytes1=True):
+    '''Counts the lines, words, chars, and bytes of an opened file or a file name'''
+    if isinstance(file1,str):
+        return wc_file_name(file1,lines,words,chars,bytes1)
+    else:
+        return wc_file_in(file1,lines,words,chars,bytes1)
+
+def wc_dump(file1, lines=True, words=True, chars=True, bytes1=True):
+    '''Prints the line, word, char, and byte counts of a file'''
+    sys.stdout.writelines(wc(file1,lines,words,chars,bytes1) + '\n')
                
 def main():
     ''' Process command line options '''
@@ -74,9 +89,9 @@ def main():
     if not any([lines, words, chars, bytes1]):
         lines, words, chars = True, True, True
     
-    wc(file_in, lines, words, chars, bytes1)
+    with file_in:
+        wc_dump(file_in, lines, words, chars, bytes1)
     
-    file_in.close()
     
 if __name__ == '__main__':
     if DEBUG:

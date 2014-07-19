@@ -12,13 +12,18 @@ import re
 from itertools import islice
 
 import argparse
-#from argparse import ArgumentParser
+
 
 DEBUG = 0
 TEST = 0
 
-def grep(file_in, pattern, regular_expression=False, max_num=None, ignore_case=False, invert_match=False):
-    '''Prints the lines of a file that match the pattern'''
+def grep_file_name(file_name, pattern, regular_expression=False, max_num=None, ignore_case=False, invert_match=False):
+    '''Generates the lines of a file that match the pattern'''
+    with open(file_name,'r') as f_in:
+        return (line for line in list(grep_file_in(f_in, pattern, regular_expression, max_num, ignore_case, invert_match)))
+
+def grep_file_in(file_in, pattern, regular_expression=False, max_num=None, ignore_case=False, invert_match=False):
+    '''Generates the lines of a file that match the pattern'''
     flags = 0
     if ignore_case:
         flags |= re.IGNORECASE
@@ -39,10 +44,19 @@ def grep(file_in, pattern, regular_expression=False, max_num=None, ignore_case=F
     if max_num is not None:
         lines = islice(lines, max_num)
         
-    sys.stdout.writelines(lines)
+    return lines
         
-        
-            
+def grep(file1, pattern, regular_expression=False, max_num=None, ignore_case=False, invert_match=False):
+    '''Generates the lines of a file that match the pattern'''
+    if isinstance(file1, str):
+        return grep_file_name(file1, pattern, regular_expression, max_num, ignore_case, invert_match)
+    else:
+        return grep_file_in(file1, pattern, regular_expression, max_num, ignore_case, invert_match)
+
+def grep_dump(file1, pattern, regular_expression=False, max_num=None, ignore_case=False, invert_match=False):
+    '''Prints the lines of a file that match the pattern'''
+    sys.stdout.writelines(grep(file1, pattern, regular_expression, max_num, ignore_case, invert_match))
+    
 def main():
     ''' Process command line options '''
     
@@ -66,8 +80,9 @@ def main():
     ignore_case = args.ignore_case
     invert_match = args.invert_match
     
-    grep(file_in, pattern, regexp, max_num, ignore_case, invert_match)
-    file_in.close() 
+    with file_in:
+        grep_dump(file_in, pattern, regexp, max_num, ignore_case, invert_match)
+     
     
 if __name__ == '__main__':
     if DEBUG:

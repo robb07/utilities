@@ -14,10 +14,25 @@ import argparse
 DEBUG = 0
 TEST = 0
 
-def head(file_in, N=10):
-    '''Prints the first lines of a file'''
-    sys.stdout.writelines(islice(file_in, N))
+def head_file_name(file_name, N=10):
+    '''Generator of the first lines of a file'''
+    with open(file_name) as f_in:
+        return (line for line in list(head_file_in(f_in, N)))
+
+def head_file_in(file_in, N=10):
+    '''Generator of the first lines of an open file'''
+    return islice(file_in, N)
+    
+def head(file1, N=10):
+    '''Generates the first lines of a file (file_name or open)'''
+    if isinstance(file1,str):
+        return head_file_name(file1, N)
+    else:
+        return head_file_in(file1, N)
         
+def head_dump(file1, N=10):
+    '''Prints the first lines of a file'''
+    sys.stdout.writelines(head(file1,N))
             
 def main():
     ''' Process command line options '''
@@ -34,9 +49,10 @@ def main():
     file_in = args.FILE
     N_lines = args.lines
     
-    head(file_in, N_lines) 
-    file_in.close()
     
+    with file_in:
+        head_dump(file_in, N_lines) 
+        
 if __name__ == '__main__':
     if DEBUG:
         sys.argv.append('-h')

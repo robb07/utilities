@@ -8,19 +8,45 @@ Created on Jun 15, 2014
 '''
 
 import sys
-from itertools import islice
+#from itertools import islice
 import argparse
 
 DEBUG = 0
-TEST = 0
+TEST = 1
 
-def tail(file_in, N=10):
-    '''Prints the last lines of a file'''
-    #doesn't work for stdin
-    length = sum(1 for _ in file_in)
-    file_in.seek(0)
-    sys.stdout.writelines(islice(file_in, length-N, length))
+# def tail(file_in, N=10):
+#     '''Prints the last lines of a file'''
+#     #doesn't work for stdin
+#     length = sum(1 for _ in file_in)
+#     file_in.seek(0)
+#     sys.stdout.writelines(islice(file_in, length-N, length))
+
+def tail_file_name(file_name, N=10):
+    '''Generates the last lines of file name'''
+    with open(file_name,'r') as f_in:
+        return tail_file_in(f_in, N)
+    
+def tail_file_in(file_in, N=10):
+    '''Generates the last lines of an open file'''
+    out_lines = []
+    for line in file_in:
+        out_lines.append(line)
+        if len(out_lines) > N:
+            out_lines.pop(0)
             
+    return out_lines
+
+def tail(file1, N=10):
+    '''Generates the last lines of an open file or file name'''
+    if isinstance(file1, str):
+        return tail_file_name(file1, N)
+    else:
+        return tail_file_in(file1, N)
+
+def tail_dump(file1, N=10):
+    '''Prints the last lines of an open file or file name'''
+    sys.stdout.writelines(tail(file1, N))
+
 def main():
     ''' Process command line options '''
     
@@ -36,8 +62,9 @@ def main():
     file_in = args.FILE
     N_lines = args.lines
     
-    tail(file_in, N_lines)
-    file_in.close() 
+    with file_in:
+        tail_dump(file_in, N_lines)
+     
     
 if __name__ == '__main__':
     if DEBUG:

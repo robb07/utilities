@@ -9,15 +9,26 @@ Created on Jun 27, 2014
 
 import sys
 import argparse
+import itertools
 
 DEBUG = 0
 TEST = 0
 
+def cat_file_name(file_name):
+    '''Generator of the first lines of a file'''
+    with open(file_name) as f_in:
+        return (line for line in list(f_in))
+
 def cat(files_in):
-    '''Prints the file'''
-    for file_in in files_in:
-        sys.stdout.writelines(file_in)
+    '''Generates one or more files'''
+    if isinstance(files_in,str):
+        return cat_file_name(files_in)
+    else:        
+        return itertools.chain(*[cat_file_name(file_in) if isinstance(file_in,str) else file_in for file_in in files_in])
         
+def cat_dump(files_in):
+    '''Prints the files to stdout'''
+    sys.stdout.writelines(cat(files_in))
             
 def main():
     ''' Process command line options '''
@@ -33,15 +44,13 @@ def main():
     # Unpack the arguments
     files = args.FILE
     
-    files_in = [open(path,'r') if path != '-' else sys.stdin for path in files]
+#     files_in = [open(path,'r') if path != '-' else sys.stdin for path in files]
+    files = [path if path != '-' else sys.stdin for path in files]
     
-    print files
-    print files_in
+    #print files
+
+    cat_dump(files)
     
-    cat(files_in) 
-    
-    for file_in in files_in:
-        file_in.close()
     
 if __name__ == '__main__':
     if DEBUG:
