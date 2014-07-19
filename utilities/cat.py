@@ -15,12 +15,12 @@ DEBUG = 0
 TEST = 0
 
 def cat_file_name(file_name):
-    '''Generator of the first lines of a file'''
+    '''Generates the lines of a file'''
     with open(file_name) as f_in:
         return (line for line in list(f_in))
 
 def cat(files_in):
-    '''Generates one or more files'''
+    '''Generates the lines from one or more files'''
     if isinstance(files_in,str):
         return cat_file_name(files_in)
     else:        

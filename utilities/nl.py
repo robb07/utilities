@@ -14,12 +14,12 @@ DEBUG = 0
 TEST = 0
 
 def nl_file_name(file_name):
-    '''Generator of the first lines of a file'''
+    '''Generates numbered lines for a file'''
     with open(file_name) as f_in:
         return (line for line in list(nl_file_in(f_in)))
 
 def nl_file_in(file_in):
-    '''Generator of the first lines of an open file'''
+    '''Generates numbered lines for an open file'''
     return (str(i)+'\t'+line for i, line in enumerate(file_in))
     
 def nl(file1):
@@ -29,9 +29,9 @@ def nl(file1):
     else:
         return nl_file_in(file1)
         
-def nl_dump(file_in):
+def nl_dump(file1):
     '''Numbers the lines in the file'''
-    sys.stdout.writelines(nl(file_in))    
+    sys.stdout.writelines(nl(file1))    
             
 def main():
     ''' Process command line options '''
