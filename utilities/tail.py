@@ -34,7 +34,7 @@ def tail_file_in(file_in, N=10):
         if len(out_lines) > N:
             out_lines.pop(0)
             
-    return out_lines
+    return (line for line in out_lines)
 
 def tail(file1, N=10):
     '''Generates the last lines of an open file or file name'''
